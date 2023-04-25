@@ -1,0 +1,9 @@
+#environment file
+input
+.env
+
+#media dirs
+archive
+
+#cached files
+__pycache__
