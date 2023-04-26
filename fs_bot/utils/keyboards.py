@@ -10,13 +10,22 @@ def start_inline() -> InlineKeyboardMarkup:
 
     return builder.as_markup()
 
+def default_inline(id: int) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Мои группы", callback_data=f"groups_with_{id}")
+    builder.button(text="Выход", callback_data=f"exit_with_{id}")
+
+    builder.adjust(2)
+
+    return builder.as_markup()
+
 def admin_default_inline() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text="Добавить группу", callback_data="manager_add")
     builder.button(text="Удалить группу", callback_data="manager_delete")
     builder.button(text="Просмотреть все группы", callback_data="manager_all")
 
-    builder.adjust(2, 2)
+    builder.adjust(2, 1)
 
     return builder.as_markup()
 
@@ -47,15 +56,6 @@ def admin_subjects_inline(group: str, subjects: list[str]) -> InlineKeyboardMark
 
     builder.button(text="Назад к группам", callback_data="manager_all")
     builder.adjust(1)
-
-    return builder.as_markup()
-
-def default_inline(id: int) -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-    builder.button(text="Мои группы", callback_data=f"groups_with_{id}")
-    builder.button(text="Выход", callback_data=f"exit_with_{id}")
-
-    builder.adjust(2)
 
     return builder.as_markup()
 

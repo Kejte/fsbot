@@ -44,12 +44,9 @@ async def add_group_result(message: Message, state: FSMContext):
         return
     context = await state.get_data()
     if manager.create_group_dir(context['title'], context['members'].split("\n")):
-        await message.answer("Группа и дисциплины созданы!")
+        await message.answer("Группа и дисциплины созданы!", reply_markup=keyboards.admin_default_inline())
     else:
-        await message.answer("Что-то пошло не так, обратитесь к системному администратору")
-
-async def delete_group(callback: CallbackQuery, bot: Bot):
-    pass
+        await message.answer("Что-то пошло не так, обратитесь к системному администратору", reply_markup=keyboards.admin_default_inline())
 
 async def all_groups(callback: CallbackQuery, bot: Bot):
     await callback.message.delete()
@@ -63,20 +60,12 @@ async def retrieve_group(callback: CallbackQuery, bot: Bot):
     await bot.send_message(callback.from_user.id, "Выберите дисципдины" if subjects else "Дисциплины не добавлены в группу", 
                            reply_markup=keyboards.admin_subjects_inline(callback.data.split("_")[3], subjects))
 
-
 async def retrieve_group_subject(callback: CallbackQuery, bot: Bot):
     await callback.message.delete()
     group = callback.data.split("_")[1]
     subject = callback.data.split("_")[4]
-    subject_dir = manager.get_subject_dir(group, subject)
     await bot.send_message(callback.from_user.id, 'Выберите действие',
                            reply_markup=keyboards.admin_subject_media(group, subject))
-
-async def retrieve_group_subject_photo(callback: CallbackQuery, bot: Bot):
-    pass
-
-async def retrieve_group_subject_video(callback: CallbackQuery, bot: Bot):
-    pass
 
 async def get_subject_media(callback: CallbackQuery, state: FSMContext):
     group = callback.data.split("_")[1]
