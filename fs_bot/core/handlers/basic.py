@@ -18,6 +18,7 @@ async def drop_start(message: Message, bot: Bot):
     await bot.send_message(message.from_user.id, f'Привет, выбери действие', reply_markup=keyboards.start_inline())
 
 async def apply_request(callback: CallbackQuery, bot: Bot):
+    await callback.message.delete()
     try:
         await bot.send_message(settings.bots.manager, 
                            f"Поступил запрос от пользователя с никнеймом {callback.from_user.full_name}, продолжить?",
@@ -28,9 +29,10 @@ async def apply_request(callback: CallbackQuery, bot: Bot):
     await bot.send_message(callback.from_user.id, "Нужно немного подождать, менеджер подтверждает запрос на вашу регистрацию")
 
 async def agree_request(callback: CallbackQuery, bot: Bot):
+    await callback.message.delete()
     basic.add_user(callback.data.split("_")[3])
     await bot.send_message(callback.data.split("_")[3], f"Вы успешно зарегистрированы, выберите действие", reply_markup=keyboards.teacher_default_inline())
 
 async def decline_request(callback: CallbackQuery, bot: Bot):
-    basic.add_user()
+    await callback.message.delete()
     await bot.send_message(callback.data.split("_")[3], "К сожалению, ваш запрос отклонен. Подайте заявку позже")

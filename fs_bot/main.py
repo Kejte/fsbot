@@ -5,7 +5,7 @@ from fs_bot.core.settings import settings
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from fs_bot.utils.commands import set_commands
-from fs_bot.core.handlers import basic, manager
+from fs_bot.core.handlers import basic, manager, teacher
 from fs_bot.utils import states
 
 
@@ -17,7 +17,7 @@ async def start_bot(bot: Bot):
     except FileExistsError:
         pass
     try:
-        open(settings.bots.user_accessed_list, "r+")
+        open(settings.bots.user_accessed_list, "x")
     except FileExistsError:
         pass
     await bot.send_message(settings.bots.admin_id, text='Бот запущен!')
@@ -45,8 +45,25 @@ async def load_bot():
     dp.callback_query.register(basic.decline_request, F.data.startswith("decline_request"))
 
 
+    # TEACHER handlers
+    dp.callback_query.register(teacher.teacher_start, F.data.startswith('teacher_start'))
+
+    # LEVEL: group
+    dp.callback_query.register(teacher.all_groups, F.data.startswith('teacher_all'))
+
+    # LEVEL: subject
+    dp.callback_query.register(teacher.retrieve_group, F.data.startswith('teacher_retrieve'))
+    dp.callback_query.register(teacher.retrieve_group_subject, F.data.startswith('teacher'), F.data.contains('retrieve_subject'))
+
+
+    # LEVEL: media
+    dp.callback_query.register(teacher.get_subject_media, F.data.startswith('teacher'), F.data.contains('add_media'))
+    dp.message.register(teacher.save_subject_media, states.AddMediaState.GET_MEDIA)
+
+
     # MANAGER handlers
     dp.callback_query.register(manager.start_admin, F.data.startswith("manager_start"))
+
 
     # LEVEL: group
     dp.callback_query.register(manager.add_group_start, F.data.startswith("manager_add"))
@@ -56,8 +73,8 @@ async def load_bot():
     dp.callback_query.register(manager.all_groups, F.data.startswith("manager_all"))
 
     # LEVEL: subject
-    dp.callback_query.register(manager.retrieve_group, F.data.contains("retrieve_group"))
-    dp.callback_query.register(manager.retrieve_group_subject, F.data.contains("retrieve_subject"))
+    dp.callback_query.register(manager.retrieve_group, F.data.startswith("manager"), F.data.contains("retrieve_group"))
+    dp.callback_query.register(manager.retrieve_group_subject, F.data.startswith("manager"), F.data.contains("retrieve_subject"))
 
     # LEVEL: media
     dp.callback_query.register(manager.get_subject_media, F.data.contains('add_media'))
