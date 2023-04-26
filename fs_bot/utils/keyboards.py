@@ -4,16 +4,15 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 def start_inline() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text="Подать заявку", callback_data="apply_request")
-    builder.button(text="Информация", callback_data="start_info")
+    builder.button(text="Информация", callback_data="info")
 
     builder.adjust(2)
 
     return builder.as_markup()
 
-def default_inline(id: int) -> InlineKeyboardMarkup:
+def teacher_default_inline() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.button(text="Мои группы", callback_data=f"groups_with_{id}")
-    builder.button(text="Выход", callback_data=f"exit_with_{id}")
+    builder.button(text="Мои группы", callback_data=f"manager_all")
 
     builder.adjust(2)
 
@@ -22,17 +21,16 @@ def default_inline(id: int) -> InlineKeyboardMarkup:
 def admin_default_inline() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text="Добавить группу", callback_data="manager_add")
-    builder.button(text="Удалить группу", callback_data="manager_delete")
-    builder.button(text="Просмотреть все группы", callback_data="manager_all")
+    builder.button(text="Все группы", callback_data="manager_all")
 
-    builder.adjust(2, 1)
+    builder.adjust(1, 1)
 
     return builder.as_markup()
 
 def admin_apply_inline(id: int) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.button(text="Да", callback_data=f"agree_request_with_{id}")
-    builder.button(text="Нет", callback_data=f"decline_request_with_{id}")
+    builder.button(text="Да", callback_data=f"agree_request_user_{id}")
+    builder.button(text="Нет", callback_data=f"decline_request_user_{id}")
 
     builder.adjust(2)
 

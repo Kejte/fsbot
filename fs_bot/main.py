@@ -17,7 +17,7 @@ async def start_bot(bot: Bot):
     except FileExistsError:
         pass
     try:
-        open(settings.bots.user_accessed_list, "w+")
+        open(settings.bots.user_accessed_list, "r+")
     except FileExistsError:
         pass
     await bot.send_message(settings.bots.admin_id, text='Бот запущен!')
@@ -41,13 +41,8 @@ async def load_bot():
     # WELCOME handlers
     dp.message.register(basic.drop_start, Command(commands='start'))
     dp.callback_query.register(basic.apply_request, F.data.contains("apply_request"))
-    dp.callback_query.register(basic.agree_request, F.data.startswith("agree_request_with"))
-    dp.callback_query.register(basic.decline_request, F.data.startswith("decline_request_with"))
-
-
-    # TEACHER handlers
-    dp.callback_query.register(basic.groups, F.data.startswith("groups_with"))
-    dp.callback_query.register(basic.exit, F.data.startswith("exit_with"))
+    dp.callback_query.register(basic.agree_request, F.data.startswith("agree_request"))
+    dp.callback_query.register(basic.decline_request, F.data.startswith("decline_request"))
 
 
     # MANAGER handlers

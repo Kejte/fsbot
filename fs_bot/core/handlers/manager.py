@@ -71,7 +71,7 @@ async def get_subject_media(callback: CallbackQuery, state: FSMContext):
     group = callback.data.split("_")[1]
     subject = callback.data.split("_")[2]
     await state.update_data(group=group, subject=subject)
-    await callback.answer('Отправьте медиа файл')
+    await callback.message.answer('Отправьте медиа файл')
     await state.set_state(states.AddMediaState.GET_MEDIA)
     
 
