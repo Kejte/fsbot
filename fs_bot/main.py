@@ -6,13 +6,13 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from fs_bot.utils.commands import set_commands
 from fs_bot.core.handlers import basic, manager
-from fs_bot.utils.states import AddGroupState, AddSubjectsState
+from fs_bot.utils.states import AddGroupState, AddMediaState
 
 
 async def start_bot(bot: Bot):
     await set_commands(bot)
     try:
-        os.mkdir(settings.bots.project_archive)
+        os.mkdir(settings.bots.project_archive, mode=777)
     except FileExistsError:
         pass
     await bot.send_message(settings.bots.admin_id, text='Бот запущен!')
@@ -40,14 +40,16 @@ async def load_bot():
     dp.callback_query.register(manager.start_admin, F.data.startswith("manager_start"))
     dp.callback_query.register(manager.add_group_start, F.data.startswith("manager_add"))
     dp.message.register(manager.add_group_title, AddGroupState.GET_TITLE)
-    dp.message.register(manager.add_group_members, AddGroupState.GET_MEMBERS)
+    dp.message.register(manager.add_group_subject, AddGroupState.GET_SUBJECT)
     dp.message.register(manager.add_group_result, AddGroupState.GET_RESULT)
     dp.callback_query.register(manager.delete_group, F.data.startswith("manager_delete"))
     dp.callback_query.register(manager.all_groups, F.data.startswith("manager_all"))
     dp.callback_query.register(manager.retrieve_group, F.data.contains("retrieve_group"))
-    dp.callback_query.register(manager.retrieve_group_student, F.data.contains("retrieve_student"))
-    dp.callback_query.register(manager.add_student_subject_start, F.data.contains("add_subject"))
-    dp.message.register(manager.add_student_subject_end, AddSubjectsState.GET_SUBJECTS)
+    dp.callback_query.register(manager.retrieve_group_subject, F.data.contains("retrieve_subject"))
+    dp.callback_query.register(manager.get_subject_media, F.data.contains('add_media'))
+    dp.message.register(manager.save_subject_media, AddMediaState.GET_MEDIA )
+    
+    
 
     try:
         await dp.start_polling(bot)

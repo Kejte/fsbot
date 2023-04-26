@@ -40,10 +40,10 @@ def admin_groups_inline(groups: list[str]) -> InlineKeyboardMarkup:
     
     return builder.as_markup()
 
-def admin_students_inline(group: str, students: list[str]) -> InlineKeyboardMarkup:
+def admin_subjects_inline(group: str, subjects: list[str]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    for student in students:
-        builder.button(text=student, callback_data=f"manager_{group}_retrieve_student_{student}")
+    for subject in subjects:
+        builder.button(text=subject, callback_data=f"manager_{group}_retrieve_subject_{subject}")
 
     builder.button(text="Назад к группам", callback_data="manager_all")
     builder.adjust(1)
@@ -59,14 +59,11 @@ def default_inline(id: int) -> InlineKeyboardMarkup:
 
     return builder.as_markup()
 
-def admin_student_subjects(group:str, student:str,subjects: list[str]) -> InlineKeyboardMarkup:
+def admin_subject_media(group: str, subject: str):
     builder = InlineKeyboardBuilder()
-    for subject in subjects:
-        builder.button(text=subject, callback_data=f"manager_{group}_{student}_retrieve_subject_{subject}")
+    builder.button(text='Добавить медиа файл', callback_data=f'manager_{group}_{subject}_add_media_')
+    builder.button(text='Выход', callback_data=f'manager_retrieve_group_{group}')
 
-    builder.button(text="Добавить предмет", callback_data=f"manager_{group}_{student}_add_subject")
-    builder.button(text="Назад к студентам", callback_data=f"manager_retrieve_group_{group}")
-
-    builder.adjust(1)
-
+    builder.adjust(2)
+    
     return builder.as_markup()
